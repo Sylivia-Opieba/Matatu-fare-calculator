@@ -4,37 +4,70 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Matatu Fare - Rongai</title>
 <style>
-body{background:#FFD600;font-family:Arial;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;padding:20px}
-.card{background:white;padding:30px;border-radius:20px;max-width:400px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.2);text-align:center}
-h1{color:#111;margin:0 0 5px}
-select,button{width:100%;padding:14px;margin:10px 0;border-radius:12px;font-size:16px}
-select{border:2px solid #ddd}
-button{background:#111;color:#FFD600;font-weight:bold;border:none}
-button:active{transform:scale(0.98)}
-#result{margin-top:20px;font-size:20px;font-weight:bold}
-small{color:#666}
+body{background:#FFD600 !important; margin:0; font-family:Arial; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:20px;}
+.card{background:white !important; padding:25px; border-radius:20px; width:100%; max-width:360px; box-shadow:0 10px 30px rgba(0,0,0,0.2); text-align:center;}
+select,input{width:100%; padding:12px; border-radius:10px; border:1px solid #ccc; margin:10px 0; font-size:16px; box-sizing:border-box;}
+button{width:100%; padding:14px; background:black; color:#FFD600; border:none; border-radius:12px; font-weight:bold; font-size:16px; cursor:pointer; margin-top:10px;}
+#result{margin-top:15px; font-weight:bold; font-size:18px;}
+.rec-box{background:#FFF9C4; border-left:4px solid #FFD600; padding:12px; border-radius:8px; text-align:left; margin-top:15px; display:none; font-size:14px;}
+small{color:#666;}
 </style>
 </head>
 <body>
 <div class="card">
-<h1>🚌 Matatu Fare</h1>
+<h2>🚌 Matatu Fare</h2>
 <p>#MyFirstCode - By Sylvia from Rongai</p>
-<p>Select your route:</p>
+
+<label>Select your route:</label>
 <select id="route">
 <option value="50">Rongai - Town (50 KES)</option>
-<option value="70">Rongai - Westlands (80 KES)</option>
-<option value="100">Rongai - CBD - Kitengela (100 KES)</option>
-<option value="30">Rongai - Kiserian (30 KES)</option>
+<option value="100">Rongai - Kitengela (100 KES)</option>
+<option value="80">Rongai - Kware (80 KES)</option>
+<option value="30">Rongai - Maasai Lodge (30 KES)</option>
 </select>
+
+<label>How many people?</label>
+<input type="number" id="people" value="1" min="1">
+
+<label><input type="checkbox" id="student" style="width:auto;"> Student discount?</label>
+
 <button onclick="checkFare()">Check Fare</button>
-<p id="result"></p>
-<p style="font-size:12px;opacity:0.6">Built with HTML for #MyFirstCode challenge</p>
+
+<div id="result"></div>
+<div id="recommend" class="rec-box"></div>
+
+<p><small>Built with HTML + Copilot for #MyFirstCode challenge<br>Built by Sylvia Opieba from Rongai</small></p>
 </div>
+
 <script>
 function checkFare(){
-let fare=document.getElementById('route').value;
-let routeText=document.getElementById('route').options[document.getElementById('route').selectedIndex].text;
-document.getElementById('result').innerHTML="Fare: <b>"+fare+" KES</b><br><small>"+routeText+"</small>";
+let base = parseInt(document.getElementById('route').value);
+let people = parseInt(document.getElementById('people').value) || 1;
+let isStudent = document.getElementById('student').checked;
+let hour = new Date().getHours();
+let isPeak = (hour>=7 && hour<=9) || (hour>=16 && hour<=20);
+let extra = isPeak ? 20 : 0;
+let farePerPerson = base + extra;
+if(isStudent){ farePerPerson = Math.round(farePerPerson * 0.8); }
+let total = farePerPerson * people;
+
+let resultText = `Bei ya moja: ${farePerPerson} KES<br>Jumla (${people} watu): ${total} KES`;
+if(isPeak) resultText += `<br>⚠️ Peak hours - bei imeongezeka!`;
+if(isStudent) resultText += `<br>🎓 Student discount applied!`;
+
+document.getElementById('result').innerHTML = resultText;
+
+// RECOMMENDATIONS
+let recBox = document.getElementById('recommend');
+let recs = [];
+if(farePerPerson > 80) recs.push("💡 Chukua route fupi uokoe pesa");
+if(isPeak) recs.push("💡 Kuja mapema kesho uokoe 20 KES - Avoid 7-9am & 4-8pm");
+if(people >=3) recs.push("💡 Gawa bei na marafiki!");
+if(total > 200) recs.push("💡 Tumia pesa kidogo - Lipa M-Pesa na uombe receipt");
+if(!isPeak) recs.push("✅ Sio peak hours - bei poa sasa, safiri sasa!");
+
+recBox.innerHTML = "<b>💡 Mapendekezo:</b><br>" + recs.join("<br>");
+recBox.style.display = "block";
 }
 </script>
 </body>
