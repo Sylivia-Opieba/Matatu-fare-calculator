@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Matatu Fare - #MyFirstCode</title>
+<style>
+body{font-family:sans-serif;background:#0a0a0a;color:white;text-align:center;padding:30px}
+.card{background:#1a1a1a;padding:25px;border-radius:15px;max-width:400px;margin:auto;border:1px solid #333}
+select,button{width:100%;padding:12px;margin:10px 0;border-radius:8px;font-size:16px}
+button{background:#ffcc00;color:black;font-weight:bold;border:none}
+h1{color:#ffcc00}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🚌 Matatu Fare</h1>
+<h3>#MyFirstCode - By Tim from Rongai</h3>
+<p>Select your route:</p>
+<select id="route">
+<option value="50">Rongai - Town (50 KES)</option>
+<option value="80">Rongai - Westlands (80 KES)</option>
+<option value="100">Rongai - CBD - Kitengela (100 KES)</option>
+<option value="30">Rongai - Kiserian (30 KES)</option>
+</select>
+<button onclick="checkFare()">Check Fare</button>
+<p id="result" style="font-size:20px;margin-top:15px"></p>
+<p style="font-size:12px;opacity:0.6">Built with HTML for #MyFirstCode challenge</p>
+</div>
+<script>
+function checkFare(){
+let fare=document.getElementById('route').value;
+let routeText=document.getElementById('route').options[document.getElementById('route').selectedIndex].text;
+document.getElementById('result').innerHTML = "Fare: <b>" + fare + " KES</b><br><small>" + routeText + "</small>";
+}
+</script>
+</body>
+</html>
